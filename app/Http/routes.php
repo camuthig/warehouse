@@ -14,3 +14,19 @@
 $app->get('/', function() use ($app) {
     return $app->welcome();
 });
+
+/*
+Warehouse routes
+ */
+$app->group(['prefix' => 'api/warehouses'], function () use ($app){
+    $app->get('/', ['as' => 'warehouses', 'uses' => 'App\Http\Controllers\WarehouseController@index']);
+    $app->post('/', ['as' => 'warehouses_create', 'uses' => 'App\Http\Controllers\WarehouseController@create']);
+});
+
+/*
+Products routes
+ */
+$app->group(['prefix' => 'api/products'], function () use ($app){
+    $app->get('/', ['as' => 'products', 'uses' => 'App\Http\Controllers\ProductController@index']);
+    $app->post('/', ['as' => 'products_create', 'uses' => 'App\Http\Controllers\ProductController@create']);
+});
