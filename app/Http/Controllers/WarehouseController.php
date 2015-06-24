@@ -38,12 +38,26 @@ class WarehouseController extends BaseController
 
         // Persist the data
         DB::table('warehouse')->insertGetId([
-            'name'  => $input['name'],
-            'address' => $geoJson['results'][0]['formatted_address'],
-            'latitude' => $geoJson['results'][0]['geometry']['location']['lat'],
-            'longitude' => $geoJson['results'][0]['geometry']['location']['lng']]);
+            'name'       => $input['name'],
+            'address'    => $geoJson['results'][0]['formatted_address'],
+            'latitude'   => $geoJson['results'][0]['geometry']['location']['lat'],
+            'longitude'  => $geoJson['results'][0]['geometry']['location']['lng'],
+            'created_at' => date('Y-m-d H:i:s')]);
 
         // Return 200
         return response()->json();
+    }
+
+    public function index(Request $request) {
+        // Get the data
+        try {
+            $warehouses = DB::table('warehouse')->get();
+        } catch (Exception $e) {
+            Log::error('Error getting the warehouses: ' . $e->getMessage());
+            return response(['error_message' => 'Internal Error'], 500);
+        }
+
+        // Return 200
+        return response()->json($warehouses);
     }
 }

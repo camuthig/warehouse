@@ -2,7 +2,6 @@
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
 use DB;
 use Validator;
 
@@ -29,7 +28,8 @@ class ProductController extends BaseController
             DB::table('product')->insertGetId([
                 'name'       => $input['name'],
                 'dimensions' => $input['dimensions'],
-                'weight'     => $input['weight']]);
+                'weight'     => $input['weight'],
+                'created_at' => date('Y-m-d H:i:s')]);
         } catch (Exception $e) {
             Log::error('Error persisting the data with error: ' . $e->getMessage());
             return response(['error_message' => 'Internal Error'], 500);
@@ -37,5 +37,18 @@ class ProductController extends BaseController
 
         // Return 200
         return response()->json();
+    }
+
+    public function index(Request $request) {
+        // Get the data
+        try {
+            $products = DB::table('product')->get();
+        } catch (Exception $e) {
+            Log::error('Error getting the products: ' . $e->getMessage());
+            return response(['error_message' => 'Internal Error'], 500);
+        }
+
+        // Return 200
+        return response()->json($products);
     }
 }
