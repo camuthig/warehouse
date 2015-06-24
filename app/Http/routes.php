@@ -30,3 +30,11 @@ $app->group(['prefix' => 'api/products'], function () use ($app){
     $app->get('/', ['as' => 'products', 'uses' => 'App\Http\Controllers\ProductController@index']);
     $app->post('/', ['as' => 'products_create', 'uses' => 'App\Http\Controllers\ProductController@create']);
 });
+
+/*
+Products routes
+ */
+$app->group(['prefix' => 'api/stock'], function () use ($app){
+    $app->get('/', ['as' => 'stock', 'uses' => 'App\Http\Controllers\StockController@index']);
+    $app->post('/', ['as' => 'stock_create', 'uses' => 'App\Http\Controllers\StockController@create']);
+});
