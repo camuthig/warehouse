@@ -11,6 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('App\Services\MapsService', function ($app) {
+            return new \App\Services\MapsService();
+        });
     }
 }
