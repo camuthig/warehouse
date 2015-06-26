@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use GuzzleHttp\Client;
+use Log;
 use Exception;
 
 class MapsService
@@ -9,7 +10,7 @@ class MapsService
         // Get the latitude and longitude from Google Geocode
         $client = new Client();
         try {
-            $geocode = $client->get('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($input['address']));
+            $geocode = $client->get('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address));
             if ($geocode->getStatusCode() != 200) {
                 // return an error response
                 Log::error('Received a non-200 response from Google API.');
@@ -39,7 +40,7 @@ class MapsService
     public function getDistance($destination, $warehouse) {
         $radiusOfEarth = 6371000;// Earth's radius in meters.
         $diffLatitude = $destination['latitude'] - $warehouse->latitude;
-        $diffLongitude = $destination->['longitude'] - $warehouse->longitude;
+        $diffLongitude = $destination['longitude'] - $warehouse->longitude;
         $a = sin($diffLatitude / 2) * sin($diffLatitude / 2) +
             cos($warehouse->latitude) * cos($destination['latitude']) *
             sin($diffLongitude / 2) * sin($diffLongitude / 2);

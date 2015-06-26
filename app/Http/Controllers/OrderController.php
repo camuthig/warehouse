@@ -3,9 +3,11 @@
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use DB;
+use Log;
 use Validator;
 use Exception;
 use App\Services\MapsService;
+use App\Jobs\ProcessOrder;
 
 class OrderController extends BaseController
 {
@@ -43,11 +45,11 @@ class OrderController extends BaseController
         try {
             $geoLocation = $this->maps->getLocation($input['address']);
         } catch (Exception $e) {
-            return response(['errorMessage' => $e->getMessage], 500)->json();
+            return response(['errorMessage' => $e->getMessage()], 500)->json();
         }
 
         // Mark the order as ordered (ready for shipment)
-        $order = DB::table('order')->insertGetId([
+        $order = DB::table('orders')->insertGetId([
             'status'    => 'ORDERED',
             'product_id' => $product,
             'created_at' => date('Y-m-d H:i:s')]);
@@ -68,9 +70,9 @@ class OrderController extends BaseController
         if (!is_int($product)) {
             // Get the ID first
             try {
-                $product = DB::table('product')->where('name', $product)->first();
+                $product = DB::table('product')->where('name', $product)->pluck('id');
             } catch (Exception $e) {
-                Log::error('Error getting the product ID: ' . $e->getMessage());
+                Log::error('Testing... Error getting the product ID: ' . $e->getMessage());
                 return -1;
             }
 

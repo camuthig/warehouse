@@ -7,11 +7,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use DB;
+use App\Services\MapsService;
 
 class ProcessOrder extends Job implements SelfHandling, ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
-
     /**
      * The ID of the product being ordered
      * @var int
@@ -64,19 +63,19 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
 
         // Loop over the warehouses and determine the closest to the buyer's address
         $closest = null;
-        $shortestDistance
         foreach ($warehouses as $warehouse) {
             $distance = $maps->getDistance($this->address, $warehouse);
-            if ($distance < $shortestDistance || empty($closest)) {
+            if (empty($closest) || $distance < $shortestDistance) {
                 $closest = $warehouse;
+				$shortestDistance = $distance;
             }
         }
 
         // Update the order entry to show as processed, with the assigned warehouse
         // And decrement the stock of the product at the warehouse.
         DB::beginTransaction();
-        DB::table('order')
-            ->where('id', $order)
+        DB::table('orders')
+            ->where('id', $this->order)
             ->update([
                 'status'       => 'SHIPPED',
                 'updated_at'   => date('Y-m-d H:i:s'),
@@ -84,7 +83,7 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
         DB::table('stock')
             ->where('product_id', $this->product)
             ->where('warehouse_id', $warehouse->id)
-            ->decrement('count');
+			->decrement('count', 1, ['updated_at' => date('Y-m-d H:i:s')]);
         DB::commit();
 
         // TODO: Handle failure cases and requeue as needed
