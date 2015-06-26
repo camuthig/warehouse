@@ -39,6 +39,7 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
     {
         $this->product = $product;
         $this->address = $address;
+        $this->order = $order;
     }
 
     /**
@@ -57,6 +58,13 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
             ->select('warehouse.*')
             ->get();
 
+        if (empty($warehouses)) {
+            Log::error('Product sold out while processing order.');
+            Log::error('Order:: ' . $this->order);
+            Log::error('Product:: ' . $this->product);
+            throw new Exception();
+        }
+
         // TODO Include a notification system in case we ran out of stock between
         // placing the order and setting the warehouse. Should be rare, but could
         // happen
@@ -67,7 +75,7 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
             $distance = $maps->getDistance($this->address, $warehouse);
             if (empty($closest) || $distance < $shortestDistance) {
                 $closest = $warehouse;
-				$shortestDistance = $distance;
+                $shortestDistance = $distance;
             }
         }
 
@@ -82,8 +90,8 @@ class ProcessOrder extends Job implements SelfHandling, ShouldQueue
                 'warehouse_id' => $closest->id]);
         DB::table('stock')
             ->where('product_id', $this->product)
-            ->where('warehouse_id', $warehouse->id)
-			->decrement('count', 1, ['updated_at' => date('Y-m-d H:i:s')]);
+            ->where('warehouse_id', $closest->id)
+            ->decrement('count', 1, ['updated_at' => date('Y-m-d H:i:s')]);
         DB::commit();
 
         // TODO: Handle failure cases and requeue as needed
