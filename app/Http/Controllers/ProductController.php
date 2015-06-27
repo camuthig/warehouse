@@ -20,7 +20,7 @@ class ProductController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return response($validator->errors(), 400);
+            return response(['errorFields' => $validator->errors()], 400);
         }
 
         // Persist the data

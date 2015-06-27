@@ -19,7 +19,7 @@ class WarehouseController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return response($validator->errors(), 400);
+            return response(['errorFields' => $validator->errors()], 400);
         }
 
         // Get the latitude and longitude from Google Geocode

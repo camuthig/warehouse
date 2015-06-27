@@ -18,7 +18,7 @@ class StockController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return response($validator->errors(), 400);
+            return response(['errorFields' => $validator->errors()], 400);
         }
 
         // Validate that both the product and warehouse exist

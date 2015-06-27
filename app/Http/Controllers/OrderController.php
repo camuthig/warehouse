@@ -30,7 +30,7 @@ class OrderController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return response($validator->errors(), 400);
+            return response(['errorFields' => $validator->errors()], 400);
         }
 
         // Make sure that the product is in stock somewhere
