@@ -61,6 +61,21 @@ class OrderController extends BaseController
         return response()->json();
     }
 
+    public function index() {
+        // Get the data
+        try {
+            $orders = DB::table('orders')
+                ->get();
+        } catch (Exception $e) {
+            Log::error('Error getting the orders: ' . $e->getMessage());
+            return response(['error_message' => 'Internal Error'], 500);
+        }
+
+        // Return 200
+        return response()->json($orders);
+
+    }
+
     /**
      * Get a product that is in stock using either the name or ID
      * @param   mixed       $product    An integer ID or string name

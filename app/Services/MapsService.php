@@ -6,6 +6,14 @@ use Exception;
 
 class MapsService
 {
+    /**
+     * Get the formatted address, latitude and longitude of an address.
+     * @param  string $address  A string representation of an address. Ex: "1 Main St, Some City, CA, 95555"
+     * @return array            An array with the keys:
+     *                           - address
+     *                           - latitude
+     *                           - longitude
+     */
     public function getLocation($address) {
         // Get the latitude and longitude from Google Geocode
         $client = new Client();
