@@ -66,9 +66,10 @@ class StockController extends BaseController
     }
 
     /**
-     * Get a product using either the name or ID
+     * Get a product using either the name or ID.
      * @param   mixed       $product    An integer ID or string name
      * @return  stdClas                 A stdClass representation of the product, or null if not found
+     * @todo Move this method to a model style class instead of in the controller
      */
     protected function getProduct($product) {
         if (is_numeric($product)) {
@@ -90,6 +91,7 @@ class StockController extends BaseController
      * Get a warehouse using either the name or ID
      * @param   mixed       $product    An integer ID or string name
      * @return  stdClass                A stdClass representation of the warehouse, or null if not found
+     * @todo Move this method to a model style class instead of in the controller
      */
     protected function getWarehouse($warehouse) {
         if (is_numeric($warehouse)) {
