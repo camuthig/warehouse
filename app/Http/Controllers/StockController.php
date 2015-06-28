@@ -47,6 +47,24 @@ class StockController extends BaseController
         return response()->json();
     }
 
+	public function index() {
+		// Get the data
+        try {
+			$products = DB::table('stock')
+				->join('product', 'product.id', '=', 'stock.product_id')
+				->join('warehouse', 'warehouse.id', '=', 'stock.warehouse_id')
+				->select(['stock.*', 'product.name as product_name', 'warehouse.name as warehouse_name'])
+				->get();
+        } catch (Exception $e) {
+            Log::error('Error getting the products: ' . $e->getMessage());
+            return response(['error_message' => 'Internal Error'], 500);
+        }
+
+        // Return 200
+        return response()->json($products);
+
+	}
+
     /**
      * Get a product using either the name or ID
      * @param   mixed       $product    An integer ID or string name
