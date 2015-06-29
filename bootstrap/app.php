@@ -88,7 +88,7 @@ $app->singleton(
 Prep the logger for production environments
  */
 
-if(!(getenv('APP_ENV') === 'production')) {
+if(getenv('APP_ENV') === 'production') {
     $logger = $app->make(\Psr\Log\LoggerInterface::class);
     $logger->popHandler();
     $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
