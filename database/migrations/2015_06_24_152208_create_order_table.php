@@ -29,6 +29,7 @@ class CreateOrderTable extends Migration
             $table->foreign('product_id')
                 ->references('id')->on('product')
                 ->onDelete('cascade');
+            $table->string('address');
         });
     }
 

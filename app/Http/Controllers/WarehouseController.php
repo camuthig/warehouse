@@ -5,10 +5,11 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use DB;
 use Validator;
+use App\Services\MapsService;
 
 class WarehouseController extends BaseController
 {
-    public function create(Request $request) {
+    public function create(Request $request, MapsService $maps) {
         $input = $request->all();
 
         // Validate the data sent to us
@@ -23,25 +24,14 @@ class WarehouseController extends BaseController
         }
 
         // Get the latitude and longitude from Google Geocode
-        $client = new Client();
-        try {
-            $geocode = $client->get('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($input['address']));
-            if ($geocode->getStatusCode() != 200) {
-                // return an error response
-                return geocode(['error_message' => 'Unable to locate warehouse at this time'], 500);
-            }
-        } catch (Exception $e) {
-            Log::error('Unable to get the geocode information from google with error: ' . $e->getMessage());
-            return response(['error_message' => 'Unable to get the location data.'], 500);
-        }
-        $geoJson = json_decode($geocode->getBody()->getContents(), true);
+        $address = $maps->getLocation($input['address']);
 
         // Persist the data
         DB::table('warehouse')->insertGetId([
             'name'       => $input['name'],
-            'address'    => $geoJson['results'][0]['formatted_address'],
-            'latitude'   => $geoJson['results'][0]['geometry']['location']['lat'],
-            'longitude'  => $geoJson['results'][0]['geometry']['location']['lng'],
+            'address'    => $address['address'],
+            'latitude'   => $address['latitude'],
+            'longitude'  => $address['longitude'],
             'created_at' => date('Y-m-d H:i:s')]);
 
         // Return 200

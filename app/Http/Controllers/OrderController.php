@@ -52,6 +52,7 @@ class OrderController extends BaseController
         $order = DB::table('orders')->insertGetId([
             'status'    => 'ORDERED',
             'product_id' => $product,
+            'address'    => $geoLocation['address'],
             'created_at' => date('Y-m-d H:i:s')]);
 
         // queue up the calculations for assigning the warehouse
