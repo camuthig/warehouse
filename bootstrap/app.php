@@ -2,8 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-
-if(!getenv('APP_ENV') === 'production') {
+if(!(getenv('APP_ENV') === 'production')) {
     Dotenv::load(__DIR__.'/../');
 }
 
@@ -83,6 +82,17 @@ $app->singleton(
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
+
+/*
+Prep the logger for production environments
+ */
+
+if(!(getenv('APP_ENV') === 'production')) {
+    $logger = $app->make(\Psr\Log\LoggerInterface::class);
+    $logger->popHandler();
+    $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
+}
 
 /*
 |--------------------------------------------------------------------------

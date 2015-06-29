@@ -83,7 +83,7 @@ class DeployHeroku extends Command
 
         // Turn off maintence mode
         $this->info('Turning off the server maintenance mode.');
-        exec('heroku meaintenance:off');
+        exec('heroku maintenance:off');
 
         $this->comment('Be sure to set APP_ENV, APP_DEBUG and APP_KEY manually for the environment.');
     }
