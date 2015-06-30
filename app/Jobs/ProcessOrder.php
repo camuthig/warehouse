@@ -7,6 +7,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use DB;
+use Log;
+use Exception;
 use App\Services\MapsService;
 
 class ProcessOrder extends Job implements SelfHandling, ShouldQueue

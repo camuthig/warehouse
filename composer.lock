@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f7d602135a6edf73a405d0811f0f2709",
+    "hash": "c481d2f11729330ccab27e1cbc2956cd",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -1855,16 +1855,16 @@
         },
         {
             "name": "iron-io/iron_mq",
-            "version": "4.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/iron-io/iron_mq_php.git",
-                "reference": "ab48d95136b5fcfbe217459163a7cc9446f39abd"
+                "reference": "9906a59885c8b715ac77346b1538a8a1c60300e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iron-io/iron_mq_php/zipball/ab48d95136b5fcfbe217459163a7cc9446f39abd",
-                "reference": "ab48d95136b5fcfbe217459163a7cc9446f39abd",
+                "url": "https://api.github.com/repos/iron-io/iron_mq_php/zipball/9906a59885c8b715ac77346b1538a8a1c60300e1",
+                "reference": "9906a59885c8b715ac77346b1538a8a1c60300e1",
                 "shasum": ""
             },
             "require": {
@@ -1887,6 +1887,10 @@
                     "email": "alexander@iron.io",
                     "homepage": "http://iron.io",
                     "role": "Developer"
+                },
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me"
                 }
             ],
             "description": "Client binding for IronMQ (hosted message queue)",
@@ -1896,7 +1900,7 @@
                 "iron",
                 "iron_mq"
             ],
-            "time": "2015-05-01 09:28:05"
+            "time": "2015-02-12 20:05:42"
         },
         {
             "name": "laravel/lumen-framework",
