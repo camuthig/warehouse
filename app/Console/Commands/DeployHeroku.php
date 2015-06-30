@@ -57,11 +57,14 @@ class DeployHeroku extends Command
         $url = parse_url(exec('heroku config:get DATABASE_URL'));
         $this->info('Enforcing database configuration on server.');
         exec('heroku config:set DB_CONNECTION=pgsql');
-        exec('heroku config:set DB_HOST=' . $url['host']);
-        exec('heroku config:set DB_PORT=' . $url['port']);
-        exec('heroku config:set DB_DATABASE=' . substr($url["path"], 1));
-        exec('heroku config:set DB_USERNAME=' . $url['user']);
-        exec('heroku config:set DB_PASSWORD=' . $url['pass']);
+        $this->comment('For the Postgres database, be sure to set DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME and DB_PASSWORD.');
+        // Since I am cheating the system and using two disparate systems, I have to use a PAAS service that
+        // both dynos can access - so I can't do this anymore.
+        // exec('heroku config:set DB_HOST=' . $url['host']);
+        // exec('heroku config:set DB_PORT=' . $url['port']);
+        // exec('heroku config:set DB_DATABASE=' . substr($url["path"], 1));
+        // exec('heroku config:set DB_USERNAME=' . $url['user']);
+        // exec('heroku config:set DB_PASSWORD=' . $url['pass']);
 
         // Set basic locale values
         $this->info('Setting basic configuration values (APP_LOCALE, APP_FALLBACK_LOCALE, CACHE, SESSION and QUEUE drivers)');
