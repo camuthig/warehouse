@@ -37,7 +37,8 @@ class StockController extends BaseController
             DB::table('stock')->insertGetId([
                 'warehouse_id' => $warehouse->id,
                 'product_id' => $product->id,
-                'count' => $input['count']
+                'count' => $input['count'],
+                'created_at' => date('Y-m-d H:i:s')
             ]);
         } catch (Exception $e) {
             Log::error('Error persisting the data with error: ' . $e->getMessage());
