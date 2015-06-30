@@ -71,7 +71,7 @@ class DeployHeroku extends Command
         // Set the Queue, Cache and Session drivers
         exec('heroku config:set CACHE_DRIVER=array');
         exec('heroku config:set SESSION_DRIVER=array');
-        exec('heroku config:set QUEUE_DRIVER=database');
+        exec('heroku config:set QUEUE_DRIVER=iron');
 
         // Push the latest code
         $this->info('Pushing latest code to Heroku.');
@@ -86,5 +86,6 @@ class DeployHeroku extends Command
         exec('heroku maintenance:off');
 
         $this->comment('Be sure to set APP_ENV, APP_DEBUG and APP_KEY manually for the environment.');
+        $this->comment('For the queue, be sure to set IRON_TOKEN, IRON_PROJECT, IRON_HOST and IRON_API_VERSION.');
     }
 }
