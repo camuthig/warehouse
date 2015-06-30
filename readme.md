@@ -1,21 +1,36 @@
-## Lumen PHP Framework
+#Warehouse
+## Running the Tests
+To run the tests first install dependencies:
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+```
+composer install
+```
+Then run phpunit
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+```
+php vendor/bin/phpunit
+```
 
-## Official Documentation
+## Working Locally
+The application is already running on heroku for use. If you want to run it locally though, be sure to set up your .env file (there are a couple of examples in place already) and serve it using artisan.
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+If you want to run things locally, you will need to update the WarehouseCLICommand serviceUrl value to point to localhost:8000 instead of the Heroku application.
 
-## Security Vulnerabilities
+You can use the database for the queue driver.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+```
+./artisan serve
+```
 
-### License
+### Design Decisions
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+* I went with Lumen 5.1 because I have previous experience using Laravel (4.1) and wanted to try the bleeding edge. It is still not quite stable enough for me to want to use it again though. 
+* I am using IronMQ for a queuing service so that I can have a separate worker and web server, and that is because I am too cheap to pay for servers/dynos. 
+* I decided to not use the Eloquent models, mostly to have a bit more of my own code in the system. 
+* The queue worker is running on my home server for simplicity, but it will get the job done. 
+* I decided to have separate CLI from application because with something as complex as choosing shipment location, heuristics can change, and it much simpler to scale and change a web application than a CLI application.
+* The queue allows the requests to continue moving quickly, even when we have hundreds of warehouses and thousands of products. 
+* I went with the Iron MQ version 2.0.0 packagist package because version 4.0 pull requests are not working with v1 of the Iron MQ API (using a v3 URL only). So it is an older version, but a working version.
+
+## Working Locally
+To test local changes, you can run ./bin/waho instead of using the phar.
